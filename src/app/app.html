@@ -1,0 +1,50 @@
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span>
+      <div>
+        <h1>Site Health</h1>
+        <p class="sub">
+          <span class="live" [class.on]="health.connected()"></span>
+          {{ health.connected() ? 'Live' : 'Reconnecting…' }}
+          · every {{ health.intervalSeconds() }}s
+          @if (health.lastRun(); as t) { · last run {{ t | date: 'HH:mm:ss' }} }
+        </p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ghost" (click)="toggleNotify()" [class.active]="notify()"
+              [title]="notify() ? 'Desktop alerts on' : 'Get a desktop alert when a site goes down'">
+        {{ notify() ? '🔔 Alerts on' : '🔕 Alerts off' }}
+      </button>
+      <button class="primary" (click)="health.checkNow()" [disabled]="health.checking() || !health.connected()">
+        @if (health.checking()) { <span class="spin"></span> Checking } @else { Check now }
+      </button>
+    </div>
+  </header>
+
+  <section class="banner" [class]="'banner ' + overall().tone">
+    <div class="b-main">
+      <span class="b-dot"></span>
+      <strong>{{ overall().text }}</strong>
+    </div>
+    <div class="b-counts">
+      <span><b class="up">{{ health.counts().up }}</b> up</span>
+      <span><b class="degraded">{{ health.counts().degraded }}</b> degraded</span>
+      <span><b class="down">{{ health.counts().down }}</b> down</span>
+      <span class="next">next check in <b>{{ countdown() }}</b></span>
+    </div>
+  </section>
+
+  @if (!health.connected() && !health.sites().length) {
+    <div class="offline">
+      Can't reach the checker API. Start it with <code>npm run api</code> (or <code>npm run serve</code> for the built app).
+    </div>
+  }
+
+  <main class="grid">
+    @for (site of health.sites(); track site.domain) {
+      <app-site-card [site]="site" />
+    }
+  </main>
+</div>

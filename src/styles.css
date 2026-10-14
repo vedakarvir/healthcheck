@@ -1,0 +1,13 @@
+:root {
+  --bg: #0b0f17; --card: #121826; --line: #232c3d; --text: #e6eaf2; --muted: #8590a6;
+  --accent: #6366f1; --up: #22c55e; --warn: #f59e0b; --down: #ef4444;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f4f6fa; --card: #ffffff; --line: #e2e6ee; --text: #121826; --muted: #5f6b80;
+    --up: #16a34a; --warn: #d97706; --down: #dc2626; color-scheme: light; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
